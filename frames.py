@@ -39,8 +39,7 @@ class MainFrame(Frame):
         self.__choose_button.grid(column=1, row=3, **general_args)
 
     def change_listsave(self, new_listname: str):
-        self.__main_list.change_listsave(new_listname,
-            save_current=not self.__curr_destroyed)
+        self.__main_list.change_listsave(new_listname)
         
         if self.__curr_destroyed:
             self.activate()
@@ -71,6 +70,7 @@ class MainFrame(Frame):
         self.__choose_button.config(state=NORMAL)
 
     def deactivate(self):
+        self.__main_list.dont_save_current()
         self.__curr_destroyed = True
         self.__clear_button.config(state=DISABLED)
         self.__append_button.config(state=DISABLED)
@@ -83,6 +83,9 @@ class SavesManager(Frame):
         super().__init__(*args, background=BACK_COL, **kwargs)
         self.__listname = 'guestlist'
         self.__listname_list = get_listname_list()
+
+        if self.__listname not in self.__listname_list:
+            self.__listname_list.append(self.__listname)
 
         self.__create_widgets()
         self.__place_widgets()
@@ -132,7 +135,7 @@ class SavesManager(Frame):
                 self.__listname_list.insert(0, input)
                 self.__update_lstlst()
 
-        else: warning('Сначала вставите название списка')
+        else: warning('Сначала вставьте название списка')
 
     def __delete_lst(self):
         input = self.__comb.get()

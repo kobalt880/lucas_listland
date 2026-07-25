@@ -13,8 +13,8 @@ class RecordableListbox(Listbox):
         self.delete(0, END)
         self.insert(END, *self.__recorder.get_content())
 
-    def change_listsave(self, new_listname: str, save_current: bool = True):
-        self.__recorder.change_listsave(new_listname, save_current)
+    def change_listsave(self, new_listname: str):
+        self.__recorder.change_listsave(new_listname)
         self.__rewrite_content()
 
     def append(self, elem: str):
@@ -39,3 +39,6 @@ class RecordableListbox(Listbox):
     def choose(self) -> str | None:
         lst = self.__recorder.get_content()
         if len(lst) > 0: return choice(lst)
+
+    def dont_save_current(self):
+        self.__recorder.dont_save_current()

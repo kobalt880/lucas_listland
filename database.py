@@ -35,20 +35,24 @@ class ListRecorder:
     def __init__(self, listname: str):
         self.__listname = listname
         self.__content = load(listname)
+        self.__can_to_save = True
 
     def get_content(self) -> list[str]:
         return self.__content.copy()
 
-    def change_listsave(self, new_listname: str, save_current: bool = True):
-        if save_current: self.save()
+    def change_listsave(self, new_listname: str):
+        self.save()
         self.__listname = new_listname
+        self.__can_to_save = True
         self.reload()
 
     def append(self, elem: str): self.__content.append(elem)
     def delete(self, index: int): self.__content.pop(index)
     def clear(self): self.__content.clear()
 
-    def save(self): save(self.__listname, self.__content)
     def reload(self): self.__content = load(self.__listname)
+    def save(self):
+        if self.__can_to_save: save(self.__listname, self.__content)
+    def dont_save_current(self): self.__can_to_save = False
 
     def __del__(self): self.save()
